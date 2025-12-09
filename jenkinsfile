@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout Git') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/denden654/sonarqubesd.git',  // Remplace par TON URL GitHub
+                    url: 'https://github.com/denden654/sonar.git',  // Remplace par TON URL GitHub
                     credentialsId: 'github-creds'  // ID de tes creds Git
             }
         }
