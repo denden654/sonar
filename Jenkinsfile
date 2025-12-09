@@ -49,7 +49,7 @@ pipeline {
         // Optionnel : Archive le JAR pour le voir dans Jenkins
         stage('Archive Artifact') {
             steps {
-                archiveArtifacts artifacts: '*/target/.jar', fingerprint: true
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
         }
     }
