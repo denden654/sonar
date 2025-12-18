@@ -52,6 +52,26 @@ pipeline {
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
         }
+                stage('Build Docker Image') {
+                    steps {
+                        script {
+                            // Construire l'image Docker à partir du Dockerfile
+                            dockerImage = docker.build("tonusername/sonar:latest")
+                        }
+                    }
+                }
+
+                stage('Push Docker Image') {
+                    steps {
+                        script {
+                            // Pousser l'image sur Docker Hub avec tes credentials Jenkins
+                            docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                                dockerImage.push('latest')
+                            }
+                        }
+                    }
+                }
+
     }
 
     post {
