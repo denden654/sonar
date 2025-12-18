@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     tools {
-        maven 'M2_HOME'    // Nom de ton installation Maven dans Jenkins (vérifie dans Global Tool Configuration)
-        jdk 'JAVA_HOME'        // Nom de ton installation Java dans Jenkins
+        maven 'M2_HOME'
+        jdk 'JAVA_HOME'
     }
 
     environment {
-        SONAR_TOKEN = credentials('jenkins-sonar') // ID du credential SonarQube dans Jenkins
-        GIT_CREDS   = credentials('github-creds') // ID du credential Git dans Jenkins
+        SONAR_TOKEN = credentials('jenkins-sonar')
+        GIT_CREDS   = credentials('github-creds')
     }
 
     stages {
         stage('Checkout Git') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/denden654/sonar.git',  // Remplace par TON URL GitHub
-                    credentialsId: 'github-creds'  // ID de tes creds Git
+                    url: 'https://github.com/denden654/sonar.git',
+                    credentialsId: 'github-creds'
             }
         }
 
@@ -34,7 +34,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sqsd') {  // Nom de ton serveur SonarQube configuré dans Jenkins
+                withSonarQubeEnv('sqsd') {
                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}'
                 }
             }
@@ -42,11 +42,11 @@ pipeline {
 
         stage('Package (JAR)') {
             steps {
-                sh 'mvn package -DskipTests'  // Skip tests pour tester vite, enlève si tu as des tests
+                sh 'mvn package -DskipTests'
             }
         }
 
-        // Optionnel : Archive le JAR pour le voir dans Jenkins
+
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
@@ -56,13 +56,13 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Nettoie l'espace de travail
+            cleanWs()
         }
         success {
             echo 'Pipeline CI réussi !'
         }
         failure {
-            echo 'Échec du pipeline 🙁'
+            echo 'Échec du pipeline '
         }
     }
 }
