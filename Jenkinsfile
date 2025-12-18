@@ -56,7 +56,7 @@ pipeline {
                     steps {
                         script {
                             // Construire l'image Docker à partir du Dockerfile
-                            dockerImage = docker.build("tonusername/sonar:latest")
+                            dockerImage = docker.build("saifdenden/sonar:latest")
                         }
                     }
                 }
