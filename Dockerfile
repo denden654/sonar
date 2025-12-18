@@ -1,5 +1,5 @@
 # Utiliser une image Java OpenJDK
-FROM openjdk:17-jdk-slim
+FROM openjdk:17
 
 # Copier le JAR dans l'image
 COPY target/sonar-0.0.1-SNAPSHOT.jar app.jar
