@@ -65,15 +65,14 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Définir l'image à pousser
                     def imageName = "saifdenden/tpdevopssaifden:latest"
-
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
                         docker.image(imageName).push()
                     }
                 }
             }
         }
+
 
     }
 
