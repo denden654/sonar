@@ -52,24 +52,36 @@ pipeline {
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
         }
-                stage('Build Docker Image') {
-                    steps {
-                        script {
-                            // Construire l'image Docker à partir du Dockerfile
-                            dockerImage = docker.build("saifdenden/sonar:latest")
+                pipeline {
+                    agent any
+
+                    environment {
+                        DOCKER_IMAGE = "mydockeruser/tpdevopssaifden:latest"
+                    }
+
+                    stages {
+                        stage('Build Docker Image') {
+                            steps {
+                                script {
+                                    // Build l'image Docker à partir du Dockerfile à la racine
+                                    docker.build(DOCKER_IMAGE)
+                                }
+                            }
+                        }
+
+                        stage('Push Docker Image') {
+                            steps {
+                                script {
+                                    // Push l'image sur Docker Hub
+                                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
+                                        docker.image(DOCKER_IMAGE).push()
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
-                stage('Push Docker Image') {
-                    steps {
-                        script {
-                            // Pousser l'image sur Docker Hub avec tes credentials Jenkins
-                            docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                                dockerImage.push('latest')
-                            }
-                        }
-                    }
                 }
 
     }
